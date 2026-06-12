@@ -148,7 +148,7 @@ The implementation uses \(\epsilon=10^{-6}\) for the original geometric and odds
 
 ## 5. Baseline Results
 
-![Baseline scores under two estimands](/Users/andyhou/Desktop/research_project/FRI/output/figure/baseline_two_metrics.png)
+![Baseline scores under two estimands](../output/figure/baseline_two_metrics.png)
 
 | Method | Question-Balanced Brier | Question-Day Weighted Brier |
 |---|---:|---:|
@@ -271,7 +271,7 @@ The site-level step is also substantive. HFC sites are hybrid forecasting system
 
 ## 10. Step 4 Results and Ablation
 
-![Step 4 ablation](/Users/andyhou/Desktop/research_project/FRI/output/figure/step4_ablation.png)
+![Step 4 ablation](../output/figure/step4_ablation.png)
 
 | Method | Question-Balanced Brier | Question-Day Weighted Brier | Interpretation |
 |---|---:|---:|---|
@@ -302,7 +302,7 @@ with 95% interval `[-0.0003299, 0.0137224]`. The point estimate is favorable, bu
 
 ## 11. Temporal Validation
 
-![Rolling-window validation](/Users/andyhou/Desktop/research_project/FRI/output/figure/rolling_window_validation.png)
+![Rolling-window validation](../output/figure/rolling_window_validation.png)
 
 Rolling-window checks ask whether the improvement is concentrated in a short period. They are not external validation, but they are useful temporal diagnostics.
 
