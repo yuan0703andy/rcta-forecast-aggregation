@@ -2,6 +2,7 @@
 .DS_Store
 __pycache__/
 *.py[cod]
+*.zip
 
 # Local raw data. These files are large and should be supplied separately or referenced via WORKDIR.
 data/raw/*
