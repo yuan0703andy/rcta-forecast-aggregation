@@ -8,6 +8,7 @@ The substantive conclusion is that simple baseline rankings depend on the scorin
 
 ```text
 analysis.py       main runnable calculation script
+final_memo.md     root copy of the submitted memo for quick reading
 src/main.py       pipeline orchestration
 src/data.py       raw-data loading and latest forecast-vector construction
 src/aggregation.py baseline and final aggregation rules
@@ -47,7 +48,8 @@ rct-a-daily-forecasts.csv
 
 | File | Purpose |
 |---|---|
-| `document/final_memo.md` | Main memo in Markdown |
+| `final_memo.md` | Root copy of the submitted memo for quick reading |
+| `document/final_memo.md` | Same memo in the document folder |
 | `document/final_memo.tex` | LaTeX source generated from the memo |
 | `document/final_memo.pdf` | Compiled memo PDF |
 | `document/deliverables_manifest.md` | File-level manifest |
