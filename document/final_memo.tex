@@ -96,8 +96,8 @@ to compare aggregation rules by Brier loss. I reconstruct five baseline
 aggregation methods from \texttt{rct-a-prediction-sets.csv}, score them
 against outcomes from \texttt{rct-a-questions-answers.csv}, and then
 propose a sixth method: \textbf{site-balanced bounded evidence pooling}.
-The method clips individual probabilities to \texttt{{[}0.02,\ 0.98{]}},
-pools clipped log-odds within forecasting site, and then combines sites
+The method bounds individual probabilities to \texttt{{[}0.02,\ 0.98{]}},
+pools bounded log-odds within forecasting site, and then combines sites
 with equal weight. In point estimate, it gives the best result among the
 tested rules under both scoring summaries: question-balanced Brier
 decreases from 0.235399 for the median baseline to 0.228379, and
@@ -246,7 +246,11 @@ Operators}\label{baseline-aggregation-operators}
 
 For each question-day and answer option, I compute five baseline
 aggregation rules. Let \(p_{ik}\) abbreviate \(p_{iqtk}\) within a fixed
-\((q,t)\). The raw mean is
+\((q,t)\). Let \(\Pi_{[a,b]}(x)\) denote projection onto the interval
+\([a,b]\); equivalently, values below \(a\) are set to \(a\), values
+above \(b\) are set to \(b\), and values inside the interval are left
+unchanged. This is the winsorization step used before logarithms or
+log-odds are taken. The raw mean is
 
 \[
 a_k=\frac{1}{n}\sum_{i=1}^n p_{ik}, \qquad
@@ -263,7 +267,7 @@ a_k=\mathrm{median}_{i}(p_{ik}), \qquad
 The geometric mean of probabilities is
 
 \[
-a_k=\exp\left(\frac{1}{n}\sum_{i=1}^n\log(\mathrm{clip}(p_{ik},\epsilon,1-\epsilon))\right),
+a_k=\exp\left(\frac{1}{n}\sum_{i=1}^n\log(\Pi_{[\epsilon,1-\epsilon]}(p_{ik}))\right),
 \qquad
 \hat p_k=\frac{a_k}{\sum_j a_j}.
 \]
@@ -275,8 +279,8 @@ one-vs-rest log-odds pooling:
 \[
 z_k=\frac{1}{n}\sum_{i=1}^n
 \log\left[
-\frac{\mathrm{clip}(p_{ik},\epsilon,1-\epsilon)}
-{1-\mathrm{clip}(p_{ik},\epsilon,1-\epsilon)}
+\frac{\Pi_{[\epsilon,1-\epsilon]}(p_{ik})}
+{1-\Pi_{[\epsilon,1-\epsilon]}(p_{ik})}
 \right],
 \qquad
 a_k=\sigma(z_k),
@@ -459,10 +463,10 @@ worst 20 account for 97.0\%.
 This is the empirical basis for the final method. The issue is not that
 log-odds pooling is always poor. Rather, it is a high-variance
 evidence-pooling rule: often useful, occasionally catastrophic. Since
-the original GMO clips only at \(10^{-6}\), one near-certain forecast
-can contribute approximately \(\pm 13.8\) log-odds units. That is an
-implausibly large individual evidence contribution in geopolitical
-forecasting.
+the original GMO uses only a very small bound, \(\epsilon=10^{-6}\), one
+near-certain forecast can contribute approximately \(\pm 13.8\)
+log-odds units. That is an implausibly large individual evidence
+contribution in geopolitical forecasting.
 
 The relative-to-individual diagnostic gives the positive side of the
 same story. GMO's mean percentile rank among individual forecasters is
@@ -498,10 +502,10 @@ should not be read as a fully held-out estimate. The stronger
 prospective design would pre-specify \(c\), or choose it by strict
 walk-forward validation.
 
-For binary questions, set \(c=0.02\) and define
+For binary questions, set \(c=0.02\) and define the bounded probability
 
 \[
-p_i^{(c)}=\min\{\max(p_i,c),1-c\}.
+p_i^{(c)}=\Pi_{[c,1-c]}(p_i).
 \]
 
 The individual bounded evidence is
