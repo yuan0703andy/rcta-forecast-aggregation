@@ -1,2 +1,2 @@
 method,mean_brier,standard_error,n_question_days,n_questions,mean_n_forecasters,median_n_forecasters,scoring_scale,weighting
-site_balanced_capped_gmo_0.02,0.21174915913965375,0.0028373455841727985,13129,189,19.686267042425165,13.0,0-2,question_day_weighted
+site_balanced_capped_gmo_0.02,0.21174915913965375,0.002837345584172792,13129,189,19.686267042425165,13.0,0-2,question_day_weighted

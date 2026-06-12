@@ -1,2 +1,2 @@
 method,comparison_baseline,observed_q_balanced_improvement_vs_median,ci_low_95,ci_high_95,n_questions,n_bootstrap,seed
-site_balanced_capped_gmo_0.02,median,0.007019780909658552,-0.0003298815228921369,0.01372235221522007,189,2000,20260612
+site_balanced_capped_gmo_0.02,median,0.00701978090965855,-0.00032988152289213705,0.01372235221522007,189,2000,20260612

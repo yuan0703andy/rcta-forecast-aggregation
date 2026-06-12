@@ -68,6 +68,7 @@ def run_analysis(workdir: str) -> None:
         {
             "method": [
                 "median_baseline",
+                "geometric_mean_baseline",
                 "original_gmo",
                 "capped_gmo_0.02",
                 "site_balanced_median",
@@ -75,6 +76,7 @@ def run_analysis(workdir: str) -> None:
             ],
             "question_balanced_brier": [
                 baseline_balanced.filter(pl.col("method") == "median")["mean_brier"][0],
+                baseline_balanced.filter(pl.col("method") == "geometric_mean")["mean_brier"][0],
                 baseline_balanced.filter(pl.col("method") == "geometric_mean_of_odds")["mean_brier"][0],
                 score_summary(capped_scores, "question_balanced")["mean_brier"][0],
                 score_summary(site_median_scores, "question_balanced")["mean_brier"][0],
@@ -82,6 +84,7 @@ def run_analysis(workdir: str) -> None:
             ],
             "question_day_weighted_brier": [
                 baseline_weighted.filter(pl.col("method") == "median")["mean_brier"][0],
+                baseline_weighted.filter(pl.col("method") == "geometric_mean")["mean_brier"][0],
                 baseline_weighted.filter(pl.col("method") == "geometric_mean_of_odds")["mean_brier"][0],
                 score_summary(capped_scores, "question_day_weighted")["mean_brier"][0],
                 score_summary(site_median_scores, "question_day_weighted")["mean_brier"][0],

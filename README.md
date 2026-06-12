@@ -2,7 +2,7 @@
 
 This repository contains the final calculation pipeline, original HFC/RCTA data files, memo documents, and output tables for the FRI work-test analysis.
 
-The substantive conclusion is that simple baseline rankings depend on the scoring estimand: the median is best under question-balanced Brier, while geometric mean is best under question-day weighting. The proposed Step 4 method, site-balanced bounded evidence pooling, improves over all five baselines under both summaries by limiting individual overconfidence and treating each forecasting site as one information source.
+The substantive conclusion is that simple baseline rankings depend on the scoring estimand: the median is best under question-balanced Brier, while geometric mean is best under question-day weighting. In point estimate, the proposed Step 4 method, site-balanced bounded evidence pooling, gives the best result under both summaries by limiting individual overconfidence and treating each forecasting site as one information source. The memo treats this gain as modest and exploratory because the paired bootstrap interval slightly crosses zero.
 
 ## Structure
 

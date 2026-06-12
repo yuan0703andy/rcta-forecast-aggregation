@@ -277,7 +277,7 @@ def write_relative_to_individual(vectors: pl.DataFrame, baseline_scores: pl.Data
 
 
 def write_rolling_window_validation(baseline_scores: pl.DataFrame, final_scores: pl.DataFrame, table: Path) -> pl.DataFrame:
-    daily = (
+    paired = (
         baseline_scores.filter(pl.col("method") == "median")
         .select(["discover_question_id", "scoring_day_et", pl.col("brier").alias("median_brier")])
         .join(
@@ -285,17 +285,20 @@ def write_rolling_window_validation(baseline_scores: pl.DataFrame, final_scores:
             on=["discover_question_id", "scoring_day_et"],
             how="inner",
         )
-        .with_columns(improvement=pl.col("median_brier") - pl.col("final_brier"))
+        .with_columns(
+            scoring_day_date=pl.col("scoring_day_et").str.to_date(),
+            improvement=pl.col("median_brier") - pl.col("final_brier"),
+        )
     )
-    day_series = (
-        daily.lazy()
-        .group_by("scoring_day_et")
+    daily_series = (
+        paired.lazy()
+        .group_by("scoring_day_date")
         .agg(improvement=pl.col("improvement").mean())
-        .sort("scoring_day_et")
+        .sort("scoring_day_date")
         .collect()
     )
     rows = []
-    x = day_series["improvement"].to_numpy()
+    x = daily_series["improvement"].to_numpy()
     for window in [7, 14, 30, 45]:
         if len(x) < window:
             continue
@@ -310,20 +313,23 @@ def write_rolling_window_validation(baseline_scores: pl.DataFrame, final_scores:
             }
         )
 
-    q_daily = (
-        daily.lazy()
-        .group_by(["scoring_day_et", "discover_question_id"])
-        .agg(improvement=pl.col("improvement").mean())
-        .group_by("scoring_day_et")
-        .agg(improvement=pl.col("improvement").mean())
-        .sort("scoring_day_et")
-        .collect()
-    )
-    xq = q_daily["improvement"].to_numpy()
+    days = daily_series["scoring_day_date"].to_list()
+    paired_q = paired.select(["scoring_day_date", "discover_question_id", "improvement"])
     for window in [14, 30, 45]:
-        if len(xq) < window:
+        if len(days) < window:
             continue
-        vals = np.array([xq[i : i + window].mean() for i in range(len(xq) - window + 1)])
+        vals = []
+        for i in range(len(days) - window + 1):
+            window_days = days[i : i + window]
+            window_value = (
+                paired_q.filter(pl.col("scoring_day_date").is_in(window_days))
+                .group_by("discover_question_id")
+                .agg(question_mean_improvement=pl.col("improvement").mean())
+                .select(pl.col("question_mean_improvement").mean())
+                .item()
+            )
+            vals.append(window_value)
+        vals = np.array(vals)
         rows.append(
             {
                 "window": f"{window}-day question-balanced",

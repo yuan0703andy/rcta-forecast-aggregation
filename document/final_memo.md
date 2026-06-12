@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This memo analyzes individual forecasts from the first-year HFC RCTA competition. The statistical problem is to construct, for each question-day, a crowd probability vector from individual forecasts and to compare aggregation rules by Brier loss. I reconstruct five baseline aggregation methods from `rct-a-prediction-sets.csv`, score them against outcomes from `rct-a-questions-answers.csv`, and then propose a sixth method: **site-balanced bounded evidence pooling**. The method clips individual probabilities to `[0.02, 0.98]`, pools clipped log-odds within forecasting site, and then combines sites with equal weight. It improves over all five baselines under both scoring summaries: question-balanced Brier decreases from 0.235399 for the median baseline to 0.228379, and question-day weighted Brier decreases from 0.218701 for geometric mean to 0.211749. The paired bootstrap improvement over median is 0.0070198 with 95% interval `[-0.0003299, 0.0137224]`, so the effect is favorable but modest. In practical terms, the method limits how much any one forecaster can move the aggregate and treats each forecasting platform as one information source rather than counting all of its members as independent evidence.
+This memo analyzes individual forecasts from the first-year HFC RCTA competition. The statistical problem is to construct, for each question-day, a crowd probability vector from individual forecasts and to compare aggregation rules by Brier loss. I reconstruct five baseline aggregation methods from `rct-a-prediction-sets.csv`, score them against outcomes from `rct-a-questions-answers.csv`, and then propose a sixth method: **site-balanced bounded evidence pooling**. The method clips individual probabilities to `[0.02, 0.98]`, pools clipped log-odds within forecasting site, and then combines sites with equal weight. In point estimate, it gives the best result among the tested rules under both scoring summaries: question-balanced Brier decreases from 0.235399 for the median baseline to 0.228379, and question-day weighted Brier decreases from 0.218701 for geometric mean to 0.211749. The paired bootstrap improvement over median is 0.0070198 with 95% interval `[-0.0003299, 0.0137224]`, so the gain is favorable but modest and should be interpreted as exploratory. In practical terms, the method keeps useful crowd agreement, but limits how much any one forecaster can move the aggregate and treats each forecasting platform as one information source rather than counting all of its members as independent evidence.
 
 ## 1. Data and Unit of Analysis
 
@@ -40,7 +40,7 @@ The cleaned scored sample contains 189 questions and 13,129 question-days.
 
 Forecast rows were retained only if they had non-missing and valid forecast probabilities, non-missing resolved probabilities, valid question and prediction-set identifiers, valid answer identifiers, non-missing forecaster identifiers, non-missing timestamps, and were not marked as made after correctness was known. Timestamps were converted to America/New_York. The scoring day is defined by the HFC 2:01pm ET cutoff: forecasts before 2:01pm ET are assigned to that calendar day, while forecasts at or after 2:01pm ET are assigned to the next scoring day.
 
-For each \((q,t,i)\), I selected the latest prediction set by timestamp and retained all answer rows from that prediction set. This preserves the vector-valued nature of multi-option submissions. Selecting answer rows independently would create artificial forecast vectors that no forecaster actually submitted.
+For each \((q,t,i)\), I selected the latest prediction set by timestamp and retained all answer rows from that prediction set. This preserves the vector-valued nature of multi-option submissions. Selecting answer rows independently would create artificial forecast vectors that no forecaster actually submitted. For multi-option questions, answer options were aligned across sites using answer sort order, because answer id in the prediction-set file is site-specific and not globally stable.
 
 ## 3. Loss Functions and Estimands
 
@@ -144,7 +144,7 @@ For binary questions, this reduces to
 \hat p_{\mathrm{No}}=1-\hat p_{\mathrm{Yes}}.
 \]
 
-The implementation uses \(\epsilon=10^{-6}\) for the original geometric and odds-based baselines.
+For \(K_q>2\), Method 5 does not uniquely specify a multinomial odds geometry. I therefore use a simple one-vs-rest extension and renormalize to the simplex; the same extension is used consistently for the baseline GMO and the Step 4 method. The implementation uses \(\epsilon=10^{-6}\) for the original geometric and odds-based baselines.
 
 ## 5. Baseline Results
 
@@ -162,7 +162,7 @@ The two estimands give different rankings. Under \(\widehat R_{\mathrm{QD}}\), g
 
 ## 6. Diagnostic Analysis
 
-Before proposing an improved aggregation rule, I diagnosed which failure modes are supported by the data. The key diagnostic was the Murphy decomposition, written on the standard 0-1 Brier scale as
+Before proposing an improved aggregation rule, I diagnosed which failure modes are supported by the data. As a secondary calibration diagnostic, I used a Murphy-style decomposition on option-level binary events, written on the standard 0-1 Brier scale as
 
 \[
 \mathrm{BS}=\mathrm{Reliability}-\mathrm{Resolution}+\mathrm{Uncertainty}.
@@ -184,7 +184,7 @@ This gives the final method a clear relation to the literature. Extremization co
 
 ## 7. Tested Conditional Improvements
 
-I also tested the feature classes suggested by the prompt. The results are summarized in Table 4.
+I also tested the feature classes suggested by the prompt. The following table summarizes the decision from each diagnostic.
 
 | Candidate direction | Statistical object | Result | Decision |
 |---|---|---|---|
@@ -216,7 +216,9 @@ The final method modifies GMO in two ways. First, it bounds individual evidence.
 
 In plain language, I first limit how much any one forecaster can influence the aggregate by capping extreme probabilities. I then average forecasts within each forecasting site and combine sites with equal weight. This prevents one overconfident forecaster, or one large site, from dominating the crowd forecast.
 
-The method satisfies the prompt's temporal constraint directly. It uses the forecasts available on day \(T\), time-invariant site labels, and a fixed cap \(c=0.02\). The cap is not fit from resolved outcomes and does not use information from day \(T\) or later.
+Like the five baselines, the method aggregates the forecasts available for question \(q\) on scoring day \(t\), using the latest submissions available by the scoring cutoff. Unlike outcome-based skill weighting or walk-forward method selection, it has no learned historical parameter. Apart from the current forecasts being aggregated and fixed metadata such as site labels, it does not use future forecasts or resolved outcomes when constructing any individual question-day forecast.
+
+The deployed formula uses a fixed cap \(c=0.02\). This cap was chosen after exploratory sensitivity checks on RCTA, so the reported gain should not be read as a fully held-out estimate. The stronger prospective design would pre-specify \(c\), or choose it by strict walk-forward validation.
 
 For binary questions, set \(c=0.02\) and define
 
@@ -267,7 +269,7 @@ The following sensitivity check varies the cap while keeping the same site-balan
 | 0.020 | 49:1 | 0.228379 |
 | 0.050 | 19:1 | 0.232418 |
 
-The site-level step is also substantive. HFC sites are hybrid forecasting systems, not ordinary demographic groups. Forecasters within a site may share platform design, information feeds, training, discussion environment, and machine assistance. Treating every forecaster as an independent evidence source can therefore over-count large sites.
+The site-level step is also substantive. HFC sites are best interpreted as partially distinct forecasting environments or performer systems, not ordinary demographic groups. Forecasters within a site may share platform design, information feeds, training, discussion environment, and machine assistance. Treating every forecaster as an independent evidence source can therefore over-count large sites.
 
 ## 10. Step 4 Results and Ablation
 
@@ -276,6 +278,7 @@ The site-level step is also substantive. HFC sites are hybrid forecasting system
 | Method | Question-Balanced Brier | Question-Day Weighted Brier | Interpretation |
 |---|---:|---:|---|
 | Median baseline | 0.235399 | 0.219796 | Robust baseline |
+| Geometric mean baseline | 0.249192 | 0.218701 | Best q-day weighted baseline |
 | Original GMO | 0.250367 | 0.233909 | Correct but fragile |
 | Capped GMO 0.02 | 0.232327 | 0.216881 | Bounded evidence only |
 | Site-balanced median | 0.234246 | 0.221594 | Site unit correction only |
@@ -312,9 +315,9 @@ Rolling-window checks ask whether the improvement is concentrated in a short per
 | 14-day daily-weighted | 0.006045 | 0.741379 |
 | 30-day daily-weighted | 0.006891 | 0.797468 |
 | 45-day daily-weighted | 0.007927 | 0.839161 |
-| 14-day question-balanced | 0.006045 | 0.741379 |
-| 30-day question-balanced | 0.006891 | 0.797468 |
-| 45-day question-balanced | 0.007927 | 0.839161 |
+| 14-day question-balanced | 0.005527 | 0.735632 |
+| 30-day question-balanced | 0.006785 | 0.803797 |
+| 45-day question-balanced | 0.008226 | 0.874126 |
 
 The fixed method has positive mean improvement across all reported windows and is positive in roughly 69-84% of windows. This reduces the concern that the improvement is driven by a single short episode.
 
