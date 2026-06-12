@@ -9,3 +9,12 @@ data/raw/*
 
 # Regenerated intermediate output
 output/table/latest_vectors.parquet
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz

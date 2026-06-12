@@ -10,7 +10,7 @@ src/aggregation.py          baseline and final aggregation rules
 src/scoring.py              Brier/JNW scoring, summaries, cap sensitivity, bootstrap
 data/raw/                   original HFC/RCTA data and scoring references
 data/prompt/                original work-test prompt PDF
-document/                   memo and documentation written for submission
+document/                   memo, LaTeX source, PDF, and documentation
 output/table/               calculation outputs written by analysis.py
 output/figure/              static figures referenced by the memo
 requirements.txt            Python package requirements
@@ -58,8 +58,9 @@ The script is calculation-only. The root `analysis.py` calls `src.main.run_analy
 
 | File | Purpose |
 |---|---|
-| `document/final_memo.md` | Main submission memo |
-| `document/technical_memo.md` | Technical copy of the memo |
+| `document/final_memo.md` | Main submission memo in Markdown |
+| `document/final_memo.tex` | LaTeX source generated from the memo |
+| `document/final_memo.pdf` | Compiled memo PDF |
 | `document/deliverables_manifest.md` | This manifest |
 
 ## Tables Produced by `analysis.py`
