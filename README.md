@@ -46,7 +46,7 @@ rct-a-daily-forecasts.csv
 
 ## Raw Data Release
 
-The raw HFC/RCTA files are public but too large for normal git history. If the GitHub Release asset is available, download `hfc-rcta-raw-data.zip` from the repository Releases page and unzip it into `data/raw/`:
+The raw HFC/RCTA files are public but too large for normal git history. Download [`hfc-rcta-raw-data.zip`](https://github.com/yuan0703andy/rcta-forecast-aggregation/releases/download/raw-data-v1/hfc-rcta-raw-data.zip) from the GitHub Release and unzip it into `data/raw/`:
 
 ```bash
 unzip hfc-rcta-raw-data.zip -d data/raw/
