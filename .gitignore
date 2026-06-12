@@ -1,0 +1,11 @@
+# macOS / Python
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# Local raw data. These files are large and should be supplied separately or referenced via WORKDIR.
+data/raw/*
+!data/raw/.gitkeep
+
+# Regenerated intermediate output
+output/table/latest_vectors.parquet
