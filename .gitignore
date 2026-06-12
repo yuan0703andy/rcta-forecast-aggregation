@@ -7,6 +7,7 @@ __pycache__/
 # Local raw data. These files are large and should be supplied separately or referenced via WORKDIR.
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/README.md
 
 # Regenerated intermediate output
 output/table/latest_vectors.parquet

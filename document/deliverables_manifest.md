@@ -8,15 +8,15 @@ src/main.py                 pipeline orchestration
 src/data.py                 raw-data loading and latest forecast-vector construction
 src/aggregation.py          baseline and final aggregation rules
 src/scoring.py              Brier/JNW scoring, summaries, cap sensitivity, bootstrap
-data/raw/                   original HFC/RCTA data and scoring references
+data/raw/                   raw-data landing folder and download instructions
 data/prompt/                original work-test prompt PDF
-document/                   memo, LaTeX source, PDF, and documentation
+document/                   LaTeX source, PDF, and documentation
 output/table/               calculation outputs written by analysis.py
 output/figure/              static figures referenced by the memo
 requirements.txt            Python package requirements
 ```
 
-The previous exploratory experiments, old pandas generator, prototype scripts, and earlier submission-index folder were removed. The remaining repository contains only the current calculation pipeline, the original data, the memo documents, and the outputs needed to inspect the final results.
+The previous exploratory experiments, old pandas generator, prototype scripts, and earlier submission-index folder were removed. The remaining repository contains the current calculation pipeline, memo PDF/LaTeX source, output tables, and instructions for obtaining the public raw data release.
 
 ## How to Rerun
 
@@ -26,9 +26,9 @@ The root `analysis.py` is the primary runnable entry point. Its first line remai
 WORKDIR = "/path/to/raw/hfc/folder"
 ```
 
-There are two supported modes:
+The raw CSV files are available as the GitHub Release asset `hfc-rcta-raw-data.zip`. There are two supported modes:
 
-1. Leave `WORKDIR` unchanged and run from this repository. The script will use `data/raw/`.
+1. Download and unzip the raw data release into `data/raw/`, leave `WORKDIR` unchanged, and run from this repository.
 2. Edit `WORKDIR` to point to another folder containing the raw HFC files.
 
 Then run:
@@ -39,26 +39,22 @@ python analysis.py
 
 The script is calculation-only. The root `analysis.py` calls `src.main.run_analysis`, and the source modules use Polars/vectorized group operations to write result tables to `output/table/`. The calculation pipeline does not generate the memo text or figures.
 
-## Original Data
+## Raw Data
 
 | Location | Contents |
 |---|---|
-| `data/raw/rct-a-questions-answers.csv` | RCTA question metadata, answer options, and resolved outcomes |
-| `data/raw/rct-a-prediction-sets.csv` | Individual forecast submissions used for the main analysis |
-| `data/raw/rct-a-daily-forecasts.csv` | Performer daily forecasts, retained as a raw reference file |
-| `data/raw/ReadMe_hfc.txt` | HFC dataset README |
-| `data/raw/hfc-reports-codebooks.xlsx` | HFC codebook |
-| `data/raw/HFC_Brier Score Calculations_MTR.pdf` | Scoring reference |
-| `data/raw/HFC_Brier Score Calculations_MTR.docx` | Scoring reference source document |
-| `data/raw/Canonical_IFP_Bank_Dataverse.xlsx` | Original question bank reference |
-| `data/raw/Technical Data Disclaimer.txt` | Original technical disclaimer |
+| `data/raw/README.md` | Instructions for downloading and unpacking the raw data release |
+| GitHub Release asset `hfc-rcta-raw-data.zip` | Public raw RCTA CSV files used by the pipeline |
+| `data/raw/rct-a-questions-answers.csv` after unzipping | RCTA question metadata, answer options, and resolved outcomes |
+| `data/raw/rct-a-prediction-sets.csv` after unzipping | Individual forecast submissions used for the main analysis |
+| `data/raw/rct-a-daily-forecasts.csv` after unzipping | Performer daily forecasts, retained as a raw reference file |
 | `data/prompt/FRI 10-Hour Work Test (Data).pdf` | Original work-test prompt |
 
 ## Main Documents
 
 | File | Purpose |
 |---|---|
-| `document/final_memo.md` | Main submission memo in Markdown |
+| `final_memo.pdf` | Root copy of the submitted memo PDF for quick reading |
 | `document/final_memo.tex` | LaTeX source generated from the memo |
 | `document/final_memo.pdf` | Compiled memo PDF |
 | `document/deliverables_manifest.md` | This manifest |
@@ -96,7 +92,7 @@ The current `analysis.py` does not generate figures. Existing figures in `output
 
 ## Recommended Reader Path
 
-1. `document/final_memo.md`
+1. `final_memo.pdf`
 2. `analysis.py`
 3. `output/table/baseline_scores_question_balanced.csv`
 4. `output/table/baseline_scores_question_day_weighted.csv`
