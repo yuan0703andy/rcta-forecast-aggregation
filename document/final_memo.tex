@@ -246,11 +246,16 @@ Operators}\label{baseline-aggregation-operators}
 
 For each question-day and answer option, I compute five baseline
 aggregation rules. Let \(p_{ik}\) abbreviate \(p_{iqtk}\) within a fixed
-\((q,t)\). Let \(\Pi_{[a,b]}(x)\) denote projection onto the interval
-\([a,b]\); equivalently, values below \(a\) are set to \(a\), values
-above \(b\) are set to \(b\), and values inside the interval are left
-unchanged. This is the winsorization step used before logarithms or
-log-odds are taken. The raw mean is
+\((q,t)\). Before taking logarithms or log-odds, I use the bounded
+probability
+
+\[
+p_{ik}^{(\epsilon)}=\min\{\max(p_{ik},\epsilon),1-\epsilon\}.
+\]
+
+Equivalently, this projects \(p_{ik}\) onto the interval
+\([\epsilon,1-\epsilon]\), or winsorizes the probability away from 0 and
+1. The raw mean is
 
 \[
 a_k=\frac{1}{n}\sum_{i=1}^n p_{ik}, \qquad
@@ -267,7 +272,7 @@ a_k=\mathrm{median}_{i}(p_{ik}), \qquad
 The geometric mean of probabilities is
 
 \[
-a_k=\exp\left(\frac{1}{n}\sum_{i=1}^n\log(\Pi_{[\epsilon,1-\epsilon]}(p_{ik}))\right),
+a_k=\exp\left(\frac{1}{n}\sum_{i=1}^n\log(p_{ik}^{(\epsilon)})\right),
 \qquad
 \hat p_k=\frac{a_k}{\sum_j a_j}.
 \]
@@ -279,8 +284,8 @@ one-vs-rest log-odds pooling:
 \[
 z_k=\frac{1}{n}\sum_{i=1}^n
 \log\left[
-\frac{\Pi_{[\epsilon,1-\epsilon]}(p_{ik})}
-{1-\Pi_{[\epsilon,1-\epsilon]}(p_{ik})}
+\frac{p_{ik}^{(\epsilon)}}
+{1-p_{ik}^{(\epsilon)}}
 \right],
 \qquad
 a_k=\sigma(z_k),
@@ -505,10 +510,12 @@ walk-forward validation.
 For binary questions, set \(c=0.02\) and define the bounded probability
 
 \[
-p_i^{(c)}=\Pi_{[c,1-c]}(p_i).
+p_i^{(c)}=\min\{\max(p_i,c),1-c\}.
 \]
 
-The individual bounded evidence is
+This is equivalent to projecting \(p_i\) onto \([c,1-c]\), or
+winsorizing the probability before converting it to log-odds. The
+individual bounded evidence is
 
 \[
 z_i^{(c)}=\mathrm{logit}(p_i^{(c)}).
