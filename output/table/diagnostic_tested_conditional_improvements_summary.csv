@@ -1,0 +1,6 @@
+candidate_direction,statistical_object,memo_result,decision
+skill_weighting,prior resolved questions per active forecaster,first_half_median_prior_resolved=3.5; second_half=16,not stable enough for season-wide use
+type_conditioned_selection,walk-forward best method by question type,oracle improves slightly; walk-forward underperforms median,hindsight structure is not deployable signal
+thin_crowd_override,switch method when n_qt is small,best threshold mostly collapses to median,not a meaningful improvement
+dispersion_shrinkage,shrink high-dispersion forecasts toward uniform,Brier worsens monotonically as shrinkage increases,"dispersion is a marker, not an intervention"
+activity_update_history,accuracy change after forecast updates,large updates improve 79% of the time,"future signal, not final rule"

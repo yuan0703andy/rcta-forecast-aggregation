@@ -74,6 +74,14 @@ The script is calculation-only. The root `analysis.py` calls `src.main.run_analy
 | `output/table/final_method_bootstrap_vs_median.csv` | Paired bootstrap over questions for final method versus median |
 | `output/table/site_balanced_cap_sensitivity.csv` | Cap sensitivity for site-balanced bounded evidence pooling |
 | `output/table/latest_vectors.parquet` | Latest individual forecast vectors used by the calculation pipeline |
+| `output/table/diagnostic_murphy_decomposition.csv` | Murphy decomposition supporting Section 6 |
+| `output/table/diagnostic_brier_stratification.csv` | Error stratification by question type, forecaster count, dispersion, and forecast age |
+| `output/table/diagnostic_tested_conditional_improvements_summary.csv` | Summary of tested conditional alternatives discussed in Section 7 |
+| `output/table/diagnostic_gmo_tail_autopsy_summary.csv` | GMO-vs-median tail-risk summary supporting Section 8 |
+| `output/table/diagnostic_gmo_vs_median_question_delta.csv` | Per-question GMO minus median loss diagnostics |
+| `output/table/diagnostic_relative_to_individual_summary.csv` | Aggregate rank relative to individual forecasters |
+| `output/table/diagnostic_relative_to_individual_question_day.csv` | Question-day level relative-to-individual diagnostics |
+| `output/table/diagnostic_rolling_window_validation.csv` | Rolling-window temporal validation supporting Section 11 |
 
 ## Static Memo Assets
 

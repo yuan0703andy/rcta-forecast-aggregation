@@ -9,6 +9,7 @@ from .aggregation import (
     aggregate_site_balanced_median,
 )
 from .data import prepare_vectors
+from .diagnostics import write_supporting_diagnostics
 from .scoring import bootstrap_vs_median, score_forecasts, score_summary, write_cap_sensitivity
 
 
@@ -91,4 +92,5 @@ def run_analysis(workdir: str) -> None:
     ablation.write_csv(table / "final_method_ablation_full.csv")
     write_cap_sensitivity(vectors, qday_meta, table)
     bootstrap_vs_median(baseline_scores, final_scores, table)
+    write_supporting_diagnostics(vectors, baseline_forecasts, baseline_scores, final_scores, table)
     print(f"Done. Polars outputs written to: {table}")

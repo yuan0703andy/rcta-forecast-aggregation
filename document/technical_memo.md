@@ -1,4 +1,4 @@
-# Technical Memo: Aggregating RCTA Individual Forecasts
+# Memo: Aggregating RCTA Individual Forecasts
 
 ## Executive Summary
 
@@ -175,8 +175,8 @@ Reliability measures calibration error; resolution measures the ability to separ
 | Murphy decomposition | median rel_share = 0.008; GMO rel_share = 0.026 | Global recalibration / extremization has little target |
 | Type stratification | binary 0.147, nominal 0.487, ordinal 0.253 under median question-day weighted scoring | Question geometry matters |
 | Dispersion stratification | low dispersion 0.141, high dispersion 0.273 | Disagreement marks difficult question-days |
-| Staleness | fresh 0.206, medium 0.218, stale 0.235 | Much weaker than type and dispersion in this no-carry-forward pipeline |
-| Forecast age | retained forecasts are same-day latest submissions, not carried-forward stale forecasts | The pipeline limits what recency decay can change |
+| Forecast age | same-day 0.219, one-day 0.220 | Much weaker than type and dispersion in this no-carry-forward pipeline |
+| Staleness interpretation | retained forecasts are same-day or one-day latest submissions, not carried-forward stale forecasts | The pipeline limits what recency decay can change |
 
 These diagnostics rule out the most standard improvement in the forecasting literature: global extremization. Extremization is useful when an average forecast is too close to 0.5 and should be pushed outward. Here, the leading baselines are not mainly underconfident. The problem is on the other side. Evidence-scale pooling is often useful, but unbounded log-odds evidence can become too extreme.
 
@@ -308,15 +308,15 @@ Rolling-window checks ask whether the improvement is concentrated in a short per
 
 | Window | Mean Improvement | Share Positive Windows |
 |---|---:|---:|
-| 7-day daily-weighted | 0.005981 | 0.697297 |
-| 14-day daily-weighted | 0.005664 | 0.718919 |
-| 30-day daily-weighted | 0.005092 | 0.702703 |
-| 45-day daily-weighted | 0.004518 | 0.670270 |
-| 14-day question-balanced | 0.005409 | 0.711957 |
-| 30-day question-balanced | 0.005189 | 0.708108 |
-| 45-day question-balanced | 0.005016 | 0.697297 |
+| 7-day daily-weighted | 0.005949 | 0.690608 |
+| 14-day daily-weighted | 0.006045 | 0.741379 |
+| 30-day daily-weighted | 0.006891 | 0.797468 |
+| 45-day daily-weighted | 0.007927 | 0.839161 |
+| 14-day question-balanced | 0.006045 | 0.741379 |
+| 30-day question-balanced | 0.006891 | 0.797468 |
+| 45-day question-balanced | 0.007927 | 0.839161 |
 
-The fixed method has positive mean improvement across all reported windows and is positive in roughly 67-72% of windows. This reduces the concern that the improvement is driven by a single short episode.
+The fixed method has positive mean improvement across all reported windows and is positive in roughly 69-84% of windows. This reduces the concern that the improvement is driven by a single short episode.
 
 ## 12. Limitations
 

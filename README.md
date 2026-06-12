@@ -58,6 +58,11 @@ rct-a-daily-forecasts.csv
 | `output/table/final_method_ablation_full.csv` | Main Step 4 ablation |
 | `output/table/improved_scores_question_balanced.csv` | Final method score, question-balanced |
 | `output/table/improved_scores_question_day_weighted.csv` | Final method score, question-day weighted |
+| `output/table/diagnostic_murphy_decomposition.csv` | Calibration/resolution diagnostic used in Section 6 |
+| `output/table/diagnostic_brier_stratification.csv` | Type, forecaster-count, dispersion, and age stratification |
+| `output/table/diagnostic_gmo_tail_autopsy_summary.csv` | GMO-vs-median tail-risk summary |
+| `output/table/diagnostic_relative_to_individual_summary.csv` | Aggregate rank relative to individual forecasters |
+| `output/table/diagnostic_rolling_window_validation.csv` | Rolling-window temporal validation |
 
 ## Note on Removed Files
 
