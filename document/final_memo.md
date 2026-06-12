@@ -24,10 +24,10 @@ p_{iqt} = (p_{iqt1},\ldots,p_{iqtK_q}), \qquad \sum_{k=1}^{K_q}p_{iqtk}=1,
 and the resolved outcome vector is
 
 \[
-y_q = (y_{q1},\ldots,y_{qK_q}), \qquad y_{qk}\in\{0,1\}, \qquad \sum_{k=1}^{K_q}y_{qk}=1.
+y_q = (y_{q1},\ldots,y_{qK_q}), \qquad y_{qk}\in[0,1], \qquad \sum_{k=1}^{K_q}y_{qk}=1.
 \]
 
-For the 166 one-row binary questions, the stored answer option is interpreted as the focal Yes answer. I construct
+In the scored RCTA sample used here, resolved outcomes are effectively one-hot after filtering. For one-row binary questions, the stored answer option is interpreted as the focal Yes answer. I construct
 
 \[
 p_{iqt,\mathrm{No}} = 1-p_{iqt,\mathrm{Yes}}, \qquad
@@ -192,7 +192,7 @@ I also tested the feature classes suggested by the prompt. The following table s
 | Type-conditioned selection | Walk-forward best method by question type | Oracle improves slightly; walk-forward underperforms median | Hindsight structure is not deployable signal |
 | Thin-crowd override | Switch method when \(n_{qt}\) is small | Best threshold mostly collapses to median | Not a meaningful improvement |
 | Dispersion shrinkage | Shrink high-dispersion forecasts toward uniform | Brier worsens monotonically as shrinkage increases | Dispersion is a marker, not an intervention |
-| Activity/update history | Accuracy change after forecast updates | Large updates improve 79% of the time | Interesting future signal, not final rule |
+| Activity/update history | Forecaster activity and update history | Exploratory diagnostic only; no reproducible estimate in the main script | Not used in the final rule |
 
 The negative results are important. They show that the final method is not a default fallback; it is chosen after plausible leakage-free alternatives fail for identifiable statistical reasons.
 
@@ -319,7 +319,7 @@ Rolling-window checks ask whether the improvement is concentrated in a short per
 | 30-day question-balanced | 0.006785 | 0.803797 |
 | 45-day question-balanced | 0.008226 | 0.874126 |
 
-The fixed method has positive mean improvement across all reported windows and is positive in roughly 69-84% of windows. This reduces the concern that the improvement is driven by a single short episode.
+The fixed method has positive mean improvement across all reported windows and is positive in roughly 69-87% of windows. This reduces the concern that the improvement is driven by a single short episode.
 
 ## 12. Limitations
 

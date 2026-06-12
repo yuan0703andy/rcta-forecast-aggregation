@@ -359,21 +359,21 @@ def write_tested_conditional_improvements_summary(table: Path) -> pl.DataFrame:
                 "walk-forward best method by question type",
                 "switch method when n_qt is small",
                 "shrink high-dispersion forecasts toward uniform",
-                "accuracy change after forecast updates",
+                "forecaster activity and update history",
             ],
             "memo_result": [
                 "first_half_median_prior_resolved=3.5; second_half=16",
                 "oracle improves slightly; walk-forward underperforms median",
                 "best threshold mostly collapses to median",
                 "Brier worsens monotonically as shrinkage increases",
-                "large updates improve 79% of the time",
+                "exploratory diagnostic only; no reproducible estimate in the main script",
             ],
             "decision": [
                 "not stable enough for season-wide use",
                 "hindsight structure is not deployable signal",
                 "not a meaningful improvement",
                 "dispersion is a marker, not an intervention",
-                "future signal, not final rule",
+                "not used in the final rule",
             ],
         }
     )
